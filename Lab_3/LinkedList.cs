@@ -170,7 +170,7 @@ namespace Lab_3
         /// </summary>
         /// <param name="insertList">Вставляемый список.</param>
         /// <param name="node">Узел для обозначения места вставки.</param>
-        public void Insert(LinkedList<T> insertList, Node<T> node)
+        private void Insert(LinkedList<T> insertList, Node<T> node)
         {
             if (tail != node)
             {
@@ -191,8 +191,14 @@ namespace Lab_3
         /// </summary>
         /// <param name="insertData">Значение вставляемого элемента.</param>
         /// <param name="node">Узел для обозначения места вставки.</param>
-        public void Insert(T insertData, Node<T> node)
+        private void Insert(T insertData, Node<T> node)
         {
+            if (node == null)
+            {
+                AddHead(insertData);
+                return;
+            }
+
             Node<T> insertNode = new(insertData);
             if (tail != node)
             {
@@ -212,7 +218,7 @@ namespace Lab_3
         /// Метод, вставляющий копию всего списка после первого вхождения указанного значения элемента.
         /// </summary>
         /// <param name="data">Значение элемента, после которого требуется вставка копии списка.</param>
-        public void InsertAfter(T data)
+        public void InsertCopyAfter(T data)
         {
             if (!IsNumericType(typeof(T)))
             {
@@ -258,10 +264,7 @@ namespace Lab_3
                 double currentData = double.Parse(currentNode.Data.ToString());
                 if (insertData < currentData)
                 {
-                    if (currentNode.Previous == null)
-                        AddHead(data);
-                    else
-                        Insert(data, currentNode.Previous);
+                    Insert(data, currentNode.Previous);
                     return;
                 }
                 currentNode = currentNode.Next;
@@ -270,9 +273,30 @@ namespace Lab_3
         }
 
         /// <summary>
+        /// Метод, вставляющий элемент с указанным значением перед первым вхождения элемента с заданным значением.
+        /// </summary>
+        /// <param name="insertData">Значение вставляемого элемента.</param>
+        /// <param name="requiredData">Значение элемента, после которого требуется вставка элемента с указанным значением.</param>
+        public void InsertBefore(T insertData, T requiredData)
+        {
+            if (head == null) return;
+
+            Node<T> currentNode = head;
+            while (currentNode != null)
+            {
+                if (currentNode.Data.Equals(requiredData))
+                {
+                    Insert(insertData, currentNode.Previous);
+                    return;
+                }
+                currentNode = currentNode.Next;
+            }
+        }
+
+        /// <summary>
         /// Метод, удаляющий первый элемент в списке.
         /// </summary>
-        private void RemoveHead()
+        public void RemoveHead()
         {
             if (head == null) return;
 
@@ -284,7 +308,7 @@ namespace Lab_3
         /// <summary>
         /// Метод, удаляющий последний элемент в списке.
         /// </summary>
-        private void RemoveTail()
+        public void RemoveTail()
         {
             if (tail == null) return;
 
@@ -293,8 +317,20 @@ namespace Lab_3
             Count--;
         }
 
-        public void RemoveNode(Node<T> node)
+        /// <summary>
+        /// Метод, удаляющий указанный узел из списка.
+        /// </summary>
+        /// <param name="node">Узел, который надо удалить.</param>
+        private void Remove(Node<T> node)
         {
+            if (Count == 1)
+            {
+                head = null;
+                tail = null;
+                Count--;
+                return;
+            }
+
             if (node.Previous != null)
             {
                 node.Previous.Next = node.Next;
@@ -322,7 +358,7 @@ namespace Lab_3
         /// Метод, удаляющий элементы со значением указанного узла, начиная с него.
         /// </summary>
         /// <param name="startNode">Узел со значением для удаления.</param>
-        public void RemoveNodes(Node<T> startNode)
+        private void RemoveWith(Node<T> startNode)
         {
             Node<T> current = startNode;
             T removeData = current.Data;
@@ -330,7 +366,24 @@ namespace Lab_3
             {
                 if (current.Data.Equals(removeData))
                 {
-                    RemoveNode(current);
+                    Remove(current);
+                }
+                current = current.Next;
+            }
+        }
+
+        /// <summary>
+        /// Метод, удаляющий элементы со указанным значением.
+        /// </summary>
+        /// <param name="removeData">Значение, элементы с которым должны быть удалены.</param>
+        public void Remove(T removeData)
+        {
+            Node<T> current = head;
+            while (current != null)
+            {
+                if (current.Data.Equals(removeData))
+                {
+                    Remove(current);
                 }
                 current = current.Next;
             }
@@ -353,7 +406,7 @@ namespace Lab_3
                 {
                     if (nextCurrent.Data.Equals(data))
                     {
-                        RemoveNodes(current);
+                        RemoveWith(current);
                         if (nextCurrent == current.Next)
                             current = current.Next;
                         break;
