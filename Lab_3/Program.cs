@@ -8,10 +8,8 @@ namespace Lab_3
         {
             LinkedList<int> linkedList = new();
 
-            linkedList.AddTail(4);
             linkedList.AddTail(2);
-            linkedList.AddTail(4);
-            linkedList.InsertAfter(2);
+            linkedList.InsertInSortedInAcsOrderList(1);
         }
     }
 }

@@ -19,6 +19,32 @@ namespace Lab_3
         public int Count { get; private set; }
 
         /// <summary>
+        /// Метод, возвращающий число различных элементов списка, содержащего целые числа.
+        /// </summary>
+        public int DistinctCount()
+        {
+            if (!IsIntegerType(typeof(T)))
+            {
+                Console.WriteLine("Этот метод используется только для целочисленного списка.");
+                return 0;
+            }
+            if (head == null) return 0;
+
+            LinkedList<T> distinctVarsList = new();
+            Node<T> currentNode = head;
+            while (currentNode != null)
+            {
+                if (distinctVarsList.Contains(currentNode.Data) != -1)
+                {
+                    currentNode = currentNode.Next;
+                    continue;
+                }
+                distinctVarsList.AddTail(currentNode.Data);
+            }
+            return distinctVarsList.Count;
+        }
+
+        /// <summary>
         /// Метод, проверяющий наличие элемента с указанным значением в списке.
         /// </summary>
         /// <param name="data">Искомое значение.</param>
@@ -26,6 +52,7 @@ namespace Lab_3
         public int Contains(T data)
         {
             if (head == null) return -1;
+
             Node<T> currentNode = head;
             for (int i = 0; i < Count; i++)
             {
@@ -35,6 +62,45 @@ namespace Lab_3
                 currentNode = currentNode.Next;
             }
             return -1;
+        }
+
+        /// <summary>
+        /// Метод, возвращающий копию списка.
+        /// </summary>
+        public LinkedList<T> Copy()
+        {
+            LinkedList<T> newList = new();
+            Node<T> currentNode = head;
+            while (currentNode != null)
+            {
+                newList.AddTail(currentNode.Data);
+                currentNode = currentNode.Next;
+            }
+            return newList;
+        }
+
+        /// <summary>
+        /// Метод, проверяющий, является ли список отсортированным по неубыванию.
+        /// </summary>
+        public bool IsSortedInAcsendingOrder()
+        {
+            if (!IsNumericType(typeof(T)))
+            {
+                Console.WriteLine("Этот метод используется только для списка с числовыми значениями.");
+                return false;
+            }
+            if (head == null || Count == 1) return true;
+
+            Node<T> currentNode = head.Next;
+            while (currentNode != null)
+            {
+                double currentData = double.Parse(currentNode.Data.ToString());
+                double previousData = double.Parse(currentNode.Previous.Data.ToString());
+                if (currentData < previousData)
+                    return false;
+                currentNode = currentNode.Next;
+            }
+            return true;
         }
 
         /// <summary>
@@ -100,6 +166,110 @@ namespace Lab_3
         }
 
         /// <summary>
+        /// Метод, вставляющий заданный список после указанного узла.
+        /// </summary>
+        /// <param name="insertList">Вставляемый список.</param>
+        /// <param name="node">Узел для обозначения места вставки.</param>
+        public void Insert(LinkedList<T> insertList, Node<T> node)
+        {
+            if (tail != node)
+            {
+                node.Next.Previous = insertList.tail;
+                insertList.tail.Next = node.Next;
+            }
+            else
+            {
+                tail = insertList.tail;
+            }
+            node.Next = insertList.head;
+            insertList.head.Previous = node;
+            Count += insertList.Count;
+        }
+
+        /// <summary>
+        /// Метод, вставляющий заданное значение после указанного узла.
+        /// </summary>
+        /// <param name="insertData">Значение вставляемого элемента.</param>
+        /// <param name="node">Узел для обозначения места вставки.</param>
+        public void Insert(T insertData, Node<T> node)
+        {
+            Node<T> insertNode = new(insertData);
+            if (tail != node)
+            {
+                node.Next.Previous = insertNode;
+                insertNode.Next = node.Next;
+            }
+            else
+            {
+                tail = insertNode;
+            }
+            node.Next = insertNode;
+            insertNode.Previous = node;
+            Count++;
+        }
+
+        /// <summary>
+        /// Метод, вставляющий копию всего списка после первого вхождения указанного значения элемента.
+        /// </summary>
+        /// <param name="data">Значение элемента, после которого требуется вставка копии списка.</param>
+        public void InsertAfter(T data)
+        {
+            if (!IsNumericType(typeof(T)))
+            {
+                Console.WriteLine("Этот метод используется только для списка с числовыми значениями.");
+                return;
+            }
+            if (head == null) return;
+
+            Node<T> currentNode = head;
+            while (currentNode != null)
+            {
+                if (currentNode.Data.Equals(data))
+                {
+                    LinkedList<T> insertList = Copy();
+                    Insert(insertList, currentNode);
+                    return;
+                }
+                currentNode = currentNode.Next;
+            }
+        }
+
+        /// <summary>
+        /// Метод, добавляющий в отсортированный по неубыванию список указанный элемент без нарушения сортировки.
+        /// </summary>
+        /// <param name="data">Значение добавляемого элемента.</param>
+        public void InsertInSortedInAcsOrderList(T data)
+        {
+            if (!IsSortedInAcsendingOrder())
+            {
+                Console.WriteLine("Этот метод используется только для отсортированного по неубыванию списка.");
+                return;
+            }
+            if (head == null)
+            {
+                Console.WriteLine("Для выполнения данного действия список должен содержать хотя бы один элемент.");
+                return;
+            }
+
+            double insertData = double.Parse(data.ToString());
+            Node<T> currentNode = head;
+            while (currentNode != null)
+            {
+                double currentData = double.Parse(currentNode.Data.ToString());
+                if (insertData < currentData)
+                {
+                    if (currentNode.Previous == null)
+                        AddHead(data);
+                    else
+                        Insert(data, currentNode.Previous);
+                    return;
+                }
+                currentNode = currentNode.Next;
+            }
+            Insert(data, tail);
+        }
+
+        /// <summary>
         /// Метод, удаляющий первый элемент в списке.
         /// </summary>
         private void RemoveHead()
@@ -123,6 +293,31 @@ namespace Lab_3
             Count--;
         }
 
+        public void RemoveNode(Node<T> node)
+        {
+            if (node.Previous != null)
+            {
+                node.Previous.Next = node.Next;
+            }
+            else
+            {
+                head = node.Next;
+                head.Previous = null;
+            }
+
+            if (node.Next != null)
+            {
+                node.Next.Previous = node.Previous;
+            }
+            else
+            {
+                tail = node.Previous;
+                tail.Next = null;
+            }
+
+            Count--;
+        }
+
         /// <summary>
         /// Метод, удаляющий элементы со значением указанного узла, начиная с него.
         /// </summary>
@@ -135,102 +330,10 @@ namespace Lab_3
             {
                 if (current.Data.Equals(removeData))
                 {
-                    if (current.Previous != null)
-                    {
-                        current.Previous.Next = current.Next;
-                    }
-                    else
-                    {
-                        head = current.Next;
-                        head.Previous = null;
-                    }
-
-                    if (current.Next != null)
-                    {
-                        current.Next.Previous = current.Previous;
-                    }
-                    else
-                    {
-                        tail = current.Previous;
-                        tail.Next = null;
-                    }
-
-                    Count--;
+                    RemoveNode(current);
                 }
                 current = current.Next;
             }
-        }
-
-        /// <summary>
-        /// Метод, разворачивающий элементы в списке.
-        /// </summary>
-        public void Reverse()
-        {
-            Node<T> current = head;
-            Node<T> temp = null;
-
-            while (current != null)
-            {
-                temp = current.Previous;
-                current.Previous = current.Next;
-                current.Next = temp;
-
-                current = current.Previous;
-            }
-
-            temp = head;
-            head = tail;
-            tail = temp;
-        }
-
-        /// <summary>
-        /// Метод, переносящий первый элемент в конец.
-        /// </summary>
-        public void HeadToTail()
-        {
-            if (head == null || Count == 1) return;
-
-            AddTail(head);
-            RemoveHead();
-            tail.Next = null;
-        }
-
-        /// <summary>
-        /// Метод, переносящий последний элемент в начало.
-        /// </summary>
-        public void TailToHead()
-        {
-            if (tail == null || Count == 1) return;
-
-            AddHead(tail);
-            RemoveTail();
-            head.Previous = null;
-        }
-
-        /// <summary>
-        /// Метод, возвращающий число различных элементов списка, содержащего целые числа.
-        /// </summary>
-        public int DistinctCount()
-        {
-            if (!IsIntegerType(typeof(T)))
-            {
-                Console.WriteLine("Этот метод используется только для целочисленного списка.");
-                return 0;
-            }
-            if (head == null) return 0;
-
-            LinkedList<T> distinctVarsList = new();
-            Node<T> currentNode = head;
-            while (currentNode != null)
-            {
-                if (distinctVarsList.Contains(currentNode.Data) != -1)
-                {
-                    currentNode = currentNode.Next;
-                    continue;
-                }
-                distinctVarsList.AddTail(currentNode.Data);
-            }
-            return distinctVarsList.Count;
         }
 
         /// <summary>
@@ -263,55 +366,49 @@ namespace Lab_3
         }
 
         /// <summary>
-        /// Метод, возвращающий копию списка.
+        /// Метод, переносящий первый элемент в конец.
         /// </summary>
-        public LinkedList<T> Copy()
+        public void HeadToTail()
         {
-            LinkedList<T> newList = new LinkedList<T>();
-            Node<T> currentNode = head;
-            while (currentNode != null)
-            {
-                newList.AddTail(currentNode.Data);
-                currentNode = currentNode.Next;
-            }
-            return newList;
+            if (head == null || Count == 1) return;
+
+            AddTail(head);
+            RemoveHead();
+            tail.Next = null;
         }
 
         /// <summary>
-        /// Метод, вставляющий копию всего списка после первого вхождения указанного значения элемента.
+        /// Метод, переносящий последний элемент в начало.
         /// </summary>
-        /// <param name="x">Значение элемента, после которого требуется вставка копии списка.</param>
-        public void InsertAfter(T x)
+        public void TailToHead()
         {
-            if (!IsNumericType(typeof(T)))
-            {
-                Console.WriteLine("Этот метод используется только для списка с числовыми значениями.");
-                return;
-            }
-            if (head == null) return;
+            if (tail == null || Count == 1) return;
 
-            Node<T> currentNode = head;
-            while (currentNode != null)
+            AddHead(tail);
+            RemoveTail();
+            head.Previous = null;
+        }
+
+        /// <summary>
+        /// Метод, разворачивающий элементы в списке.
+        /// </summary>
+        public void Reverse()
+        {
+            Node<T> current = head;
+            Node<T> temp;
+
+            while (current != null)
             {
-                if (currentNode.Data.Equals(x))
-                {
-                    LinkedList<T> insertList = Copy();
-                    if (tail != currentNode)
-                    {
-                        currentNode.Next.Previous = insertList.tail;
-                        insertList.tail.Next = currentNode.Next;
-                    }
-                    else
-                    {
-                        tail = insertList.tail;
-                    }
-                    currentNode.Next = insertList.head;
-                    insertList.head.Previous = currentNode;
-                    Count *= 2;
-                    return;
-                }
-                currentNode = currentNode.Next;
+                temp = current.Previous;
+                current.Previous = current.Next;
+                current.Next = temp;
+
+                current = current.Previous;
             }
+
+            temp = head;
+            head = tail;
+            tail = temp;
         }
     }
 }
