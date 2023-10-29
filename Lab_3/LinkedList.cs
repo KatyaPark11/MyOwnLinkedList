@@ -1,22 +1,47 @@
-﻿using static Lab_3.TypeChecker;
+﻿using System.Text;
+using static Lab_3.TypeChecker;
 
 namespace Lab_3
 {
+    /// <summary>
+    /// Класс реализации двусвязного списка.
+    /// </summary>
+    /// <typeparam name="T">Тип данных в списке.</typeparam>
     public class LinkedList<T>
     {
         /// <summary>
         /// Первый добавленный элемент списка.
         /// </summary>
-        private Node<T> head;
+        public Node<T> head;
         /// <summary>
         /// Последний добавленный элемент списка.
         /// </summary>
-        private Node<T> tail;
+        public Node<T> tail;
 
         /// <summary>
         /// Число элементов в списке.
         /// </summary>
         public int Count { get; private set; }
+
+        /// <summary>
+        /// Метод, возвращающий число элементов до узла с заданным значением.
+        /// </summary>
+        /// <param name="item">Значение ограничивающего элемента.</param>
+        private int CountUntil(T item)
+        {
+            int count = 0;
+            Node<T> currentNode = head;
+            while (currentNode != null)
+            {
+                if (currentNode.Data.Equals(item))
+                {
+                    return count;
+                }
+                count++;
+                currentNode = currentNode.Next;
+            }
+            return count;
+        }
 
         /// <summary>
         /// Метод, возвращающий число различных элементов списка, содержащего целые числа.
@@ -28,7 +53,7 @@ namespace Lab_3
                 Console.WriteLine("Этот метод используется только для целочисленного списка.");
                 return 0;
             }
-            if (head == null) return 0;
+            if (Count == 0) return 0;
 
             LinkedList<T> distinctVarsList = new();
             Node<T> currentNode = head;
@@ -45,13 +70,29 @@ namespace Lab_3
         }
 
         /// <summary>
+        /// Метод, возвращающий список в строковом формате.
+        /// </summary>
+        override public string ToString()
+        {
+            StringBuilder listStr = new();
+            
+            Node<T> currentNode = head;
+            while (currentNode != null)
+            {
+                listStr.Append(currentNode.Data.ToString() + ' ');
+                currentNode = currentNode.Next;
+            }
+            Console.WriteLine(listStr);
+            return listStr.ToString();
+        }
+
+        /// <summary>
         /// Метод, проверяющий наличие элемента с указанным значением в списке.
         /// </summary>
         /// <param name="data">Искомое значение.</param>
-        /// <returns></returns>
         public int Contains(T data)
         {
-            if (head == null) return -1;
+            if (Count == 0) return -1;
 
             Node<T> currentNode = head;
             for (int i = 0; i < Count; i++)
@@ -119,7 +160,7 @@ namespace Lab_3
         /// <param name="node">Добавляемый элемент.</param>
         private void AddHead(Node<T> node)
         {
-            if (head == null)
+            if (Count == 0)
             {
                 head = node;
                 tail = node;
@@ -150,7 +191,7 @@ namespace Lab_3
         /// <param name="node">Добавляемый элемент.</param>
         private void AddTail(Node<T> node)
         {
-            if (tail == null)
+            if (Count == 0)
             {
                 head = node;
                 tail = node;
@@ -193,7 +234,7 @@ namespace Lab_3
         /// <param name="node">Узел для обозначения места вставки.</param>
         private void Insert(T insertData, Node<T> node)
         {
-            if (node == null)
+            if (Count == 0)
             {
                 AddHead(insertData);
                 return;
@@ -225,7 +266,7 @@ namespace Lab_3
                 Console.WriteLine("Этот метод используется только для списка с числовыми значениями.");
                 return;
             }
-            if (head == null) return;
+            if (Count == 0) return;
 
             Node<T> currentNode = head;
             while (currentNode != null)
@@ -241,6 +282,34 @@ namespace Lab_3
         }
 
         /// <summary>
+        /// Метод, вставляющий в конец существующего списка другой.
+        /// </summary>
+        /// <param name="insertList">Вставляемый в конец список.</param>
+        public void InsertAsTail(LinkedList<T> insertList)
+        {
+            if (!IsIntegerType(typeof(T)))
+            {
+                Console.WriteLine("Этот метод используется только для целочисленного списка.");
+                return;
+            }
+            if (Count == 0) return;
+
+            LinkedList<T> copyOfInsList = insertList.Copy();
+            Insert(copyOfInsList, tail);
+        }
+
+        /// <summary>
+        /// Метод, вставляющий в конец списка его копию.
+        /// </summary>
+        public void InsertCopyAsTail()
+        {
+            if (Count == 0) return;
+
+            LinkedList<T> copyOfList = Copy();
+            Insert(copyOfList, tail);
+        }
+
+        /// <summary>
         /// Метод, добавляющий в отсортированный по неубыванию список указанный элемент без нарушения сортировки.
         /// </summary>
         /// <param name="data">Значение добавляемого элемента.</param>
@@ -251,7 +320,7 @@ namespace Lab_3
                 Console.WriteLine("Этот метод используется только для отсортированного по неубыванию списка.");
                 return;
             }
-            if (head == null)
+            if (Count == 0)
             {
                 Console.WriteLine("Для выполнения данного действия список должен содержать хотя бы один элемент.");
                 return;
@@ -279,7 +348,7 @@ namespace Lab_3
         /// <param name="requiredData">Значение элемента, после которого требуется вставка элемента с указанным значением.</param>
         public void InsertBefore(T insertData, T requiredData)
         {
-            if (head == null) return;
+            if (Count == 0) return;
 
             Node<T> currentNode = head;
             while (currentNode != null)
@@ -298,7 +367,7 @@ namespace Lab_3
         /// </summary>
         public void RemoveHead()
         {
-            if (head == null) return;
+            if (Count == 0) return;
 
             head = head.Next;
             head.Previous = null;
@@ -310,7 +379,7 @@ namespace Lab_3
         /// </summary>
         public void RemoveTail()
         {
-            if (tail == null) return;
+            if (Count == 0) return;
 
             tail = tail.Previous;
             tail.Next = null;
@@ -378,6 +447,8 @@ namespace Lab_3
         /// <param name="removeData">Значение, элементы с которым должны быть удалены.</param>
         public void Remove(T removeData)
         {
+            if (Count == 0) return;
+
             Node<T> current = head;
             while (current != null)
             {
@@ -394,8 +465,7 @@ namespace Lab_3
         /// </summary>
         public void RemoveDuplicates()
         {
-            if (head == null || Count == 1) return;
-
+            if (Count <= 1) return;
             Node<T> current = head;
             while (current != null)
             {
@@ -423,8 +493,7 @@ namespace Lab_3
         /// </summary>
         public void HeadToTail()
         {
-            if (head == null || Count == 1) return;
-
+            if (Count <= 1) return;
             AddTail(head);
             RemoveHead();
             tail.Next = null;
@@ -435,11 +504,44 @@ namespace Lab_3
         /// </summary>
         public void TailToHead()
         {
-            if (tail == null || Count == 1) return;
-
+            if (Count <= 1) return;
             AddHead(tail);
             RemoveTail();
             head.Previous = null;
+        }
+
+        /// <summary>
+        /// Метод, меняющий местами два элемента.
+        /// </summary>
+        /// <param name="data1">Значение первого элемента.</param>
+        /// <param name="data2">Значение второго элемента.</param>
+        public void Swap(T data1, T data2)
+        {
+            if (data1.Equals(data2) || Count <= 1) return;
+            Node<T>? node1 = null;
+            Node<T>? node2 = null;
+
+            Node<T> currentNode = head;
+            while (currentNode != null)
+            {
+                if (currentNode.Data.Equals(data1) && node1 == null)
+                {
+                    node1 = currentNode;
+                    if (node2 != null) break;
+                }
+                else if (currentNode.Data.Equals(data2) && node2 == null)
+                {
+                    node2 = currentNode;
+                    if (node1 != null) break;
+                }
+                currentNode = currentNode.Next;
+            }
+
+            if (node1 != null && node2 != null)
+            {
+                node1.Data = data2;
+                node2.Data = data1;
+            }
         }
 
         /// <summary>
@@ -447,8 +549,9 @@ namespace Lab_3
         /// </summary>
         public void Reverse()
         {
+            if (Count <= 1) return;
             Node<T> current = head;
-            Node<T> temp;
+            Node<T> temp = null;
 
             while (current != null)
             {
@@ -462,6 +565,62 @@ namespace Lab_3
             temp = head;
             head = tail;
             tail = temp;
+        }
+
+        /// <summary>
+        /// Метод, возвращающий отделённую, начиная с заданного узла, часть списка.
+        /// </summary>
+        /// <param name="node">Узел, по которому происходит разделение.</param>
+        /// <returns></returns>
+        private LinkedList<T> Substring(Node<T> node)
+        {
+            LinkedList<T> substrList = new();
+            substrList.head = node;
+            substrList.tail = tail;
+
+            if (node == head)
+            {
+                head = null;
+                tail = null;
+                substrList.Count = Count;
+                Count = 0;
+            }
+            else
+            {
+                node.Previous.Next = null;
+                tail = node.Previous;
+                node.Previous = null;
+                int prevCount = Count;
+                Count = CountUntil(node.Data);
+                substrList.Count = prevCount - Count;
+            }
+            return substrList;
+        }
+
+        /// <summary>
+        /// Метод, разделяющий список на две части по указанному значению с изменением текущего списка и возвратом отрезанной части.
+        /// </summary>
+        /// <param name="data"></param>
+        public LinkedList<T> Split(T data)
+        {
+            if (!IsNumericType(typeof(T)))
+            {
+                Console.WriteLine("Этот метод используется только для списка с числовыми значениями.");
+                return new LinkedList<T>();
+            }
+            if (Count == 0) return new LinkedList<T>();
+
+            LinkedList<T> substrList = new();
+            Node<T> currentNode = head;
+            while (currentNode != null)
+            {
+                if (currentNode.Data.Equals(data))
+                {
+                    return Substring(currentNode);
+                }
+                currentNode = currentNode.Next;
+            }
+            return new LinkedList<T>();
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿namespace Lab_3
 {
+    /// <summary>
+    /// Класс проверки типов данных.
+    /// </summary>
     public static class TypeChecker
     {
         /// <summary>
