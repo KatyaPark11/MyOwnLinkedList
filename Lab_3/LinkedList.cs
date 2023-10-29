@@ -48,13 +48,6 @@ namespace Lab_3
         /// </summary>
         public int DistinctCount()
         {
-            if (!IsIntegerType(typeof(T)))
-            {
-                Console.WriteLine("Этот метод используется только для целочисленного списка.");
-                return 0;
-            }
-            if (Count == 0) return 0;
-
             LinkedList<T> distinctVarsList = new();
             Node<T> currentNode = head;
             while (currentNode != null)
@@ -79,10 +72,14 @@ namespace Lab_3
             Node<T> currentNode = head;
             while (currentNode != null)
             {
-                listStr.Append(currentNode.Data.ToString() + ' ');
+                if (currentNode.Next == null)
+                {
+                    listStr.Append(currentNode.Data.ToString());
+                    break;
+                }
+                listStr.Append(currentNode.Data.ToString() + ", ");
                 currentNode = currentNode.Next;
             }
-            Console.WriteLine(listStr);
             return listStr.ToString();
         }
 
@@ -465,7 +462,6 @@ namespace Lab_3
         /// </summary>
         public void RemoveDuplicates()
         {
-            if (Count <= 1) return;
             Node<T> current = head;
             while (current != null)
             {
@@ -549,7 +545,6 @@ namespace Lab_3
         /// </summary>
         public void Reverse()
         {
-            if (Count <= 1) return;
             Node<T> current = head;
             Node<T> temp = null;
 

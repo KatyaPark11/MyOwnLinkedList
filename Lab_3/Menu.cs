@@ -85,8 +85,8 @@ namespace Lab_3
                 {
                     if (i == SelectedItemIndex)
                     {
-                        Console.BackgroundColor = ConsoleColor.Cyan;
-                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine(Items[i].ItemMessage);
                         Console.BackgroundColor = ConsoleColor.Black;
                         Console.ForegroundColor = ConsoleColor.White;
@@ -97,14 +97,6 @@ namespace Lab_3
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Метод выхода из программы.
-        /// </summary>
-        private void Exit()
-        {
-            Environment.Exit(0);
         }
     }
 }
