@@ -13,11 +13,11 @@
         /// <summary>
         /// Ссылка на следующий за текущим элементом узел.
         /// </summary>
-        public Node<T> Next { get; set; }
+        public Node<T>? Next { get; set; }
         /// <summary>
         /// Ссылка на предыдущий узел.
         /// </summary>
-        public Node<T> Previous { get; set; }
+        public Node<T>? Previous { get; set; }
 
         public Node(T data)
         {
