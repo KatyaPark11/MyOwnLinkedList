@@ -12,7 +12,6 @@
         /// </summary>
         public static void Main()
         {
-            Console.CursorVisible = false;
             Type dataType = ShowTheListTypeMenu();
             ShowTheListMethodsMenu(dataType);
         }
@@ -22,6 +21,7 @@
         /// </summary>
         public static Type ShowTheListTypeMenu()
         {
+            Console.CursorVisible = false;
             string header = "Выберите тип данных для своего списка:";
             List<MenuItem> listTypeMenuItems = new()
             {
@@ -46,6 +46,7 @@
         /// <param name="dataType"></param>
         private static void ShowTheListMethodsMenu(Type dataType)
         {
+            Console.CursorVisible = false;
             List<MenuItem> listMethodsMenuItems = new()
             {
                 new MenuItem("Текущее состояние списка"),

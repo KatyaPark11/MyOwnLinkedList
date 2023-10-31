@@ -334,7 +334,7 @@ namespace Lab_3
                 if (!EnterListData(out LinkedList<T>? newList)) continue;
 
                 list.InsertAsTail(newList);
-                Console.WriteLine($"Новый элементик уже в строю: {list}. Уверены, он справится со своей службой!");
+                Console.WriteLine($"У вашего списочка вырос хвостик в соответствиями с вашими ожиданиями: {list}");
                 break;
             }
             Console.ReadKey();
