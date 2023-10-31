@@ -26,13 +26,26 @@
         /// </summary>
         public bool IsSelected { get; set; }
 
-        public MenuItem(string itemNamespace, string itemClassName, string itemMethodName, string itemMessage)
+        /// <summary>
+        /// Конструктор класса.
+        /// </summary>
+        /// <param name="itemMessage">Указанная информация, соответствующая элементу.</param>
+        public MenuItem(string itemMessage)
+        {
+            ItemMessage = itemMessage;
+        }
+
+        /// <summary>
+        /// Метод для привязки метода к элементу.
+        /// </summary>
+        /// <param name="itemNamespace">Указанное пространство элемента.</param>
+        /// <param name="itemClassName">Указанное имя класса элемента.</param>
+        /// <param name="itemMethodName">Указанное имя метода элемента.</param>
+        public void SetMethodInfo(string itemNamespace, string itemClassName, string itemMethodName)
         {
             ItemNamespace = itemNamespace;
             ItemClassName = itemClassName;
             ItemMethodName = itemMethodName;
-            ItemMessage = itemMessage;
         }
-
     }
 }

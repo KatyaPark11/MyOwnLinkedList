@@ -3,15 +3,29 @@ using static Lab_3.TypeChecker;
 
 namespace Lab_3
 {
+    /// <summary>
+    /// Класс для отображения данных в консоли для пользователя.
+    /// </summary>
+    /// <typeparam name="T">Тип данных в списке.</typeparam>
     public class ListMethodCaller<T>
     {
+        /// <summary>
+        /// Текущий список для управления.
+        /// </summary>
         private LinkedList<T>? list;
 
+        /// <summary>
+        /// Конструктор класса.
+        /// </summary>
+        /// <param name="list">Указанный список для управления.</param>
         public ListMethodCaller(LinkedList<T>? list)
         {
             this.list = list;
         }
 
+        /// <summary>
+        /// Метод, отображающий текущий список в строковом формате.
+        /// </summary>
         public new void ToString()
         {
             if (list.Count != 0)
@@ -19,8 +33,12 @@ namespace Lab_3
             else
                 Console.WriteLine("Вы не увидите здесь своего списка... Но это не мы виноваты!" +
                     " Просто он неотразим (пустой, получается).");
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий добавить новый элемент в начало списка.
+        /// </summary>
         public void AddHead()
         {
             while (true)
@@ -33,8 +51,12 @@ namespace Lab_3
                 Console.WriteLine($"Лучше и быть не может: {list}. Вам же нравится, правда?");
                 break;
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий добавить новый элемент в конец списка.
+        /// </summary>
         public void AddTail()
         {
             while (true)
@@ -47,8 +69,12 @@ namespace Lab_3
                 Console.WriteLine($"А у нас пополнение! Только взгляните на эту счастливую семью: {list}");
                 break;
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий развернуть элементы в списке.
+        /// </summary>
         public void Reverse()
         {
             if (list.Count <= 1)
@@ -60,8 +86,12 @@ namespace Lab_3
                 list.Reverse();
                 Console.WriteLine($"Красивое, не правда ли: {list}");
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий перенести первый элемент в конец.
+        /// </summary>
         public void HeadToTail()
         {
             if (list.Count <= 1)
@@ -73,8 +103,12 @@ namespace Lab_3
                 list.HeadToTail();
                 Console.WriteLine($"Не знаем, зачем вам это, но держите: {list}");
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий перенести последний элемент в начало.
+        /// </summary>
         public void TailToHead()
         {
             if (list.Count <= 1)
@@ -86,13 +120,18 @@ namespace Lab_3
                 list.TailToHead();
                 Console.WriteLine($"Вот ваш заказ, держите и радуйтесь: {list}");
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий поменять местами два элемента.
+        /// </summary>
         public void Swap()
         {
             if (list.Count <= 1 || list.DistinctCount() == 1)
             {
                 Console.WriteLine("Мы не работаем со списками, где недостаточно уникальных элементов! Ну вот что, скажите, тут можно поменять?");
+                Console.ReadKey();
                 return;
             }
 
@@ -114,13 +153,18 @@ namespace Lab_3
                 Console.WriteLine($"Обмен совершён. Надеемся, это была выгодная сделка: {list}");
                 break;
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий вставить элемент с указанным значением перед первым вхождения элемента с заданным значением.
+        /// </summary>
         public void InsertBefore()
         {
             if (list.Count == 0)
             {
                 Console.WriteLine("Список пустует... Как в нём можно найти хоть какой-то элемент?");
+                Console.ReadKey();
                 return;
             }
 
@@ -137,8 +181,12 @@ namespace Lab_3
                 Console.WriteLine($"Мы сделали всё, что могли... Но не то чтобы вы ожидали от нас чего-то большего: {list}");
                 break;
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий вставить в конец списка его копию.
+        /// </summary>
         public void InsertCopyAsTail()
         {
             if (list.Count == 0)
@@ -151,8 +199,12 @@ namespace Lab_3
                 list.InsertCopyAsTail();
                 Console.WriteLine($"Поздравляем, у вас близняшки: {list}");
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий удалить дублирующиеся элементы.
+        /// </summary>
         public void RemoveDuplicates()
         {
             if (list.Count <= 1)
@@ -165,13 +217,18 @@ namespace Lab_3
                 list.RemoveDuplicates();
                 Console.WriteLine($"Того, чего вы так боялись, больше нет. Взгляните: {list}");
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий удалить элементы со указанным значением.
+        /// </summary>
         public void Remove()
         {
             if (list.Count == 0)
             {
                 Console.WriteLine("Ну допустим мы можем удалить воздух из этого списка, но элементов-то нет, удалять-то больше нечего.");
+                Console.ReadKey();
                 return;
             }
 
@@ -185,18 +242,24 @@ namespace Lab_3
                 Console.WriteLine($"Вы видите это страшненькое значение в списке: {list}? Вот и мы не видим. И его нет.");
                 break;
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий вставить копию всего списка после первого вхождения указанного значения элемента.
+        /// </summary>
         public void InsertCopyAfter()
         {
             if (!IsIntegerType(typeof(T)))
             {
                 Console.WriteLine("Этому методу нужен новый герой! То есть, другие типы данных списка.");
+                Console.ReadKey();
                 return;
             }
             else if (list.Count == 0)
             {
                 Console.WriteLine("Какое бы значение вы не указали, всё будет тщетно... Вам когда-нибудь говорили про то, что пустой список пуст?");
+                Console.ReadKey();
                 return;
             }
 
@@ -211,23 +274,30 @@ namespace Lab_3
                     $"Говорят, если не знать, что делает этот метод, можно в попытках разгадать его тайну сломать мозг.");
                 break;
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий добавить в отсортированный по неубыванию список указанный элемент без нарушения сортировки.
+        /// </summary>
         public void InsertInSortedInAcsOrderList()
         {
             if (!IsNumericType(typeof(T)))
             {
                 Console.WriteLine("Извините, мы не знаем, как это всё сравнивать... Укажите целочисленный тип данных для своего списка.");
+                Console.ReadKey();
                 return;
             }
             else if (!list.IsSortedInAcsendingOrder())
             {
                 Console.WriteLine("Перечитываем название метода... Ага-а... А вы уверены, что ваш список отсортирован по неубыванию?");
+                Console.ReadKey();
                 return;
             }
             else if (list.Count == 0)
             {
                 Console.WriteLine("Списочек пустует, а этого быть не должно! Добавьте хотя бы один элементик.");
+                Console.ReadKey();
                 return;
             }
 
@@ -241,13 +311,18 @@ namespace Lab_3
                 Console.WriteLine($"Новый элементик уже в строю: {list}. Уверены, он справится со своей службой!");
                 break;
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий вставить в конец существующего списка другой.
+        /// </summary>
         public void InsertAsTail()
         {
             if (!IsIntegerType(typeof(T)))
             {
                 Console.WriteLine("Капс был единственным нашим оружием... И оно не помогло...");
+                Console.ReadKey();
                 return;
             }
 
@@ -262,8 +337,12 @@ namespace Lab_3
                 Console.WriteLine($"Новый элементик уже в строю: {list}. Уверены, он справится со своей службой!");
                 break;
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, отображающий число различных элементов списка, содержащего целые числа.
+        /// </summary>
         public void DistinctCount()
         {
             if (!IsIntegerType(typeof(T)))
@@ -279,18 +358,24 @@ namespace Lab_3
             {
                 Console.WriteLine($"Интересный факт, который вам нужно знать: уникального в вашем списке ровно {list.DistinctCount()}");
             }
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// Метод, позволяющий разделить список на две части по указанному значению с последующим выбором текущего списка.
+        /// </summary>
         public void Split()
         {
             if (!IsIntegerType(typeof(T)))
             {
                 Console.WriteLine("ДЛЯ ЦЕЛЫХ ЧИСЕЛ! Да-да, там было написано именно так.");
+                Console.ReadKey();
                 return;
             }
             else if (list.Count == 0)
             {
                 Console.WriteLine("А вы знали, что в пустом списке нечего делить?");
+                Console.ReadKey();
                 return;
             }
 
@@ -307,6 +392,11 @@ namespace Lab_3
             }
         }
 
+        /// <summary>
+        /// Метод, проверяющий верно ли указано значение соответствующего списку типа данных.
+        /// </summary>
+        /// <param name="data">Проверяемое значение.</param>
+        /// <param name="result">Конвертированное в нужный тип данных значение.</param>
         private static bool CheckTheType(string? data, out T? result)
         {
             if (typeof(T).FullName == "System.Single" || typeof(T).FullName == "System.Double")
@@ -328,6 +418,10 @@ namespace Lab_3
             }
         }
 
+        /// <summary>
+        /// Метод для ввода одного значения и его проверки.
+        /// </summary>
+        /// <param name="data">Введённое значение.</param>
         private static bool EnterOneData(out T data)
         {
             Console.CursorVisible = true;
@@ -343,6 +437,12 @@ namespace Lab_3
             return true;
         }
 
+        /// <summary>
+        /// Метод для ввода двух значений и их проверки.
+        /// </summary>
+        /// <param name="errorMessage">Сообщение в случае если число введённых значений не соответствует двум.</param>
+        /// <param name="firstData">Первое введённое значение.</param>
+        /// <param name="secondData">Второе введённое значение.</param>
         private static bool EnterTwoData(string errorMessage, out T? firstData, out T? secondData)
         {
             Console.CursorVisible = true;
@@ -374,6 +474,10 @@ namespace Lab_3
             return true;
         }
 
+        /// <summary>
+        /// Метод для ввода списка значений.
+        /// </summary>
+        /// <param name="list">Введённый список значений.</param>
         private static bool EnterListData(out LinkedList<T>? list)
         {
             Console.CursorVisible = true;
@@ -401,6 +505,11 @@ namespace Lab_3
             return true;
         }
 
+        /// <summary>
+        /// Метод для выбора текущего списка между двумя указанными.
+        /// </summary>
+        /// <param name="firstList">Первый список.</param>
+        /// <param name="secondList">Второй список.</param>
         private void ChooseBetweenTwo(LinkedList<T>? firstList, LinkedList<T>? secondList)
         {
             while (true)
@@ -421,6 +530,7 @@ namespace Lab_3
                 else
                 {
                     Console.WriteLine("Кажется, вы нажали не ту кнопочку... Попробуйте ещё раз");
+                    Console.ReadKey();
                     continue;
                 }
 
@@ -428,6 +538,17 @@ namespace Lab_3
                 Console.WriteLine($"Вам удалось нажать верную кнопку! А потому ваш текущий список теперь выглядит вот так: {list}");
                 break;
             }
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Метод сброса списка.
+        /// </summary>
+        public void ResetTheList()
+        {
+            Type dataType = Program.ShowTheListTypeMenu();
+            object? list = Activator.CreateInstance(typeof(LinkedList<>).MakeGenericType(dataType));
+            Program.ListMethodsMenu.Instance = Activator.CreateInstance(typeof(ListMethodCaller<>).MakeGenericType(dataType), list);
         }
 
         /// <summary>

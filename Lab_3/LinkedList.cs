@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using static Lab_3.TypeChecker;
 
 namespace Lab_3
 {
@@ -52,7 +51,7 @@ namespace Lab_3
             Node<T>? currentNode = head;
             while (currentNode != null)
             {
-                if (distinctVarsList.Contains(currentNode.Data) != -1)
+                if (distinctVarsList.Contains(currentNode.Data))
                 {
                     currentNode = currentNode.Next;
                     continue;
@@ -87,19 +86,19 @@ namespace Lab_3
         /// Метод, проверяющий наличие элемента с указанным значением в списке.
         /// </summary>
         /// <param name="data">Искомое значение.</param>
-        public int Contains(T? data)
+        public bool Contains(T? data)
         {
-            if (Count == 0) return -1;
+            if (Count == 0) return false;
 
             Node<T>? currentNode = head;
             for (int i = 0; i < Count; i++)
             {
                 if (currentNode.Data == null) continue;
                 if (currentNode.Data.Equals(data))
-                    return i;
+                    return true;
                 currentNode = currentNode.Next;
             }
-            return -1;
+            return false;
         }
 
         /// <summary>
@@ -107,14 +106,14 @@ namespace Lab_3
         /// </summary>
         public LinkedList<T>? Copy()
         {
-            LinkedList<T>? newList = new();
+            LinkedList<T>? copy = new();
             Node<T>? currentNode = head;
             while (currentNode != null)
             {
-                newList.AddTail(currentNode.Data);
+                copy.AddTail(currentNode.Data);
                 currentNode = currentNode.Next;
             }
-            return newList;
+            return copy;
         }
 
         /// <summary>
@@ -234,7 +233,7 @@ namespace Lab_3
         /// <param name="node">Узел для обозначения места вставки.</param>
         private void Insert(T? insertData, Node<T>? node)
         {
-            if (node == null) node = head;
+            node ??= head;
 
             Node<T>? insertNode = new(insertData);
             if (tail != node)
@@ -387,6 +386,8 @@ namespace Lab_3
                 tail.Next = null;
             }
 
+            
+
             Count--;
         }
 
@@ -396,15 +397,14 @@ namespace Lab_3
         /// <param name="startNode">Узел со значением для удаления.</param>
         private void RemoveWith(Node<T>? startNode)
         {
-            Node<T>? current = startNode;
-            T removeData = current.Data;
-            while (current != null)
+            T removeData = startNode.Data;
+            while (startNode != null)
             {
-                if (current.Data.Equals(removeData))
+                if (startNode.Data.Equals(removeData))
                 {
-                    Remove(current);
+                    Remove(startNode);
                 }
-                current = current.Next;
+                startNode = startNode.Next;
             }
         }
 
@@ -440,14 +440,12 @@ namespace Lab_3
                 {
                     if (nextCurrent.Data.Equals(data))
                     {
-                        RemoveWith(current);
-                        if (nextCurrent == current.Next)
-                            current = current.Next;
-                        break;
+                        if (Contains(data)) RemoveWith(current);
+                        if (nextCurrent != current.Next) break;
+                        current = nextCurrent;
                     }
                     nextCurrent = nextCurrent.Next;
                 }
-
                 current = current.Next;
             }
         }
@@ -531,6 +529,24 @@ namespace Lab_3
         }
 
         /// <summary>
+        /// Метод, разделяющий список на две части по указанному значению с изменением текущего списка и возвратом отрезанной части.
+        /// </summary>
+        /// <param name="splitData">Значение для разделения списка на две части.</param>
+        public LinkedList<T>? Split(T? splitData)
+        {
+            Node<T>? currentNode = head;
+            while (currentNode != null)
+            {
+                if (currentNode.Data.Equals(splitData))
+                {
+                    return Substring(currentNode);
+                }
+                currentNode = currentNode.Next;
+            }
+            return new LinkedList<T>();
+        }
+
+        /// <summary>
         /// Метод, возвращающий отделённую, начиная с заданного узла, часть списка.
         /// </summary>
         /// <param name="node">Узел, по которому происходит разделение.</param>
@@ -559,24 +575,6 @@ namespace Lab_3
                 substrList.Count = prevCount - Count;
             }
             return substrList;
-        }
-
-        /// <summary>
-        /// Метод, разделяющий список на две части по указанному значению с изменением текущего списка и возвратом отрезанной части.
-        /// </summary>
-        /// <param name="splitData">Значение для разделения списка на две части.</param>
-        public LinkedList<T>? Split(T? splitData)
-        {
-            Node<T>? currentNode = head;
-            while (currentNode != null)
-            {
-                if (currentNode.Data.Equals(splitData))
-                {
-                    return Substring(currentNode);
-                }
-                currentNode = currentNode.Next;
-            }
-            return new LinkedList<T>();
         }
     }
 }

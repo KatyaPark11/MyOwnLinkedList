@@ -6,10 +6,21 @@
     public static class TypeChecker
     {
         /// <summary>
+        /// Словарь соответствия полных названий типов данных и их русских аналогов.
+        /// </summary>
+        public readonly static Dictionary<string, string> RusTypeSystemTypePairs = new()
+        {
+            { "Число с плавающей запятой", "System.Double" },
+            { "Число с плавающей запятой одинарной точности", "System.Single" },
+            { "Целое число", "System.Int32" },
+            { "Целое длинное число", "System.Int64" },
+            { "Строка", "System.String" }
+        };
+
+        /// <summary>
         /// Метод, проверяющий тип данных на целочисленность.
         /// </summary>
         /// <param name="type">Проверяемый тип данных.</param>
-        /// <returns></returns>
         public static bool IsIntegerType(Type type)
         {
             return
@@ -27,7 +38,6 @@
         /// Метод, проверяющий, является ли тип данных числовым.
         /// </summary>
         /// <param name="type">Проверяемый тип данных.</param>
-        /// <returns></returns>
         public static bool IsNumericType(Type type)
         {
             return type.IsPrimitive && (

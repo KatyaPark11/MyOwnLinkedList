@@ -19,6 +19,10 @@
         /// </summary>
         public Node<T>? Previous { get; set; }
 
+        /// <summary>
+        /// Конструктор класса.
+        /// </summary>
+        /// <param name="data">Значение создаваемого узла.</param>
         public Node(T data)
         {
             Data = data;

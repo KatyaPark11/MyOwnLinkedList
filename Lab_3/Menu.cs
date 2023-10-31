@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Xml.Linq;
 
 namespace Lab_3
 {
@@ -21,8 +20,12 @@ namespace Lab_3
         /// <summary>
         /// Экземпляр необходимого класса для работы с ним.
         /// </summary>
-        public object Instance { get; set; }
+        public object? Instance { get; set; }
 
+        /// <summary>
+        /// Конструктор класса.
+        /// </summary>
+        /// <param name="items">Указанные элементы меню.</param>
         public Menu(List<MenuItem> items)
         {
             Items = items;
@@ -30,9 +33,9 @@ namespace Lab_3
         }
 
         /// <summary>
-        /// Метод, отслеживающий нажатие клавиши для передвижения по меню.
+        /// Метод, отслеживающий нажатия клавиши для передвижения по меню до выхода из программы при наличии соответствующего элемента.
         /// </summary>
-        public void MoveThrough()
+        public void InfiniteMoveThrough()
         {
             while (true)
             {
@@ -63,6 +66,37 @@ namespace Lab_3
         }
 
         /// <summary>
+        /// Метод, отслеживающий нажатия клавиши для передвижения по меню до выбора одного из элементов.
+        /// </summary>
+        public void MoveThroughForSelect(string header)
+        {
+            while (true)
+            {
+                ConsoleHelper.ClearScreen();
+                Console.WriteLine($"{header}\n");
+                Show();
+                ConsoleKeyInfo pressedKey = Console.ReadKey();
+                switch (pressedKey.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        if (SelectedItemIndex == Items.Count - 1)
+                            SelectedItemIndex = 0;
+                        else
+                            SelectedItemIndex++;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        if (SelectedItemIndex == 0)
+                            SelectedItemIndex = Items.Count - 1;
+                        else
+                            SelectedItemIndex--;
+                        break;
+                    case ConsoleKey.Enter:
+                        return;
+                }
+            }
+        }
+
+        /// <summary>
         /// Метод, выполняющий операцию с заданным объектом.
         /// </summary>
         private void Execute()
@@ -71,7 +105,6 @@ namespace Lab_3
             string methodName = selectedItem.ItemMethodName;
             MethodInfo methodInfo = Instance.GetType().GetMethod(methodName);
             methodInfo.Invoke(Instance, null);
-            Console.ReadKey();
         }
 
         /// <summary>
